@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del Clima - biu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Portal de Información del Clima</h1>
+        <p>Impulsado por biuGPT</p>
+    </header>
+
+    <main>
+        <div class="controls">
+            <label for="record-count">Número de registros a consultar:</label>
+            <input type="number" id="record-count" value="20" min="1" max="100">
+            <button id="fetch-button">Consultar</button>
+        </div>
+
+        <div id="loading" class="hidden">Cargando...</div>
+
+        <h2>Estadísticas</h2>
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Temperatura (°C)</h3>
+                <p>Mín: <span id="temp-min">-</span></p>
+                <p>Máx: <span id="temp-max">-</span></p>
+                <p>Prom: <span id="temp-avg">-</span></p>
+            </div>
+            <div class="stat-card">
+                <h3>Humedad (%)</h3>
+                <p>Mín: <span id="hum-min">-</span></p>
+                <p>Máx: <span id="hum-max">-</span></p>
+                <p>Prom: <span id="hum-avg">-</span></p>
+            </div>
+            <div class="stat-card">
+                <h3>Presión (hPa)</h3>
+                <p>Mín: <span id="pres-min">-</span></p>
+                <p>Máx: <span id="pres-max">-</span></p>
+                <p>Prom: <span id="pres-avg">-</span></p>
+            </div>
+        </div>
+
+        <h2>Últimos Registros</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Ubicación</th>
+                        <th>Sensor ID</th>
+                        <th>Temperatura (°C)</th>
+                        <th>Humedad (%)</th>
+                        <th>Presión (hPa)</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table-body">
+                    <!-- Las filas de datos se insertarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
