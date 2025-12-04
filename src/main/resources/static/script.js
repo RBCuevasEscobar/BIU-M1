@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- SELECCIÓN DE NUEVOS ELEMENTOS ---
+    const currentTempCard = document.getElementById('current-temp-card');
+    const currentTempValue = document.getElementById('current-temp-value');
+    const currentTempTime = document.getElementById('current-temp-time');
+
+    const currentHumCard = document.getElementById('current-hum-card');
+    const currentHumValue = document.getElementById('current-hum-value');
+    const currentHumTime = document.getElementById('current-hum-time');
+
+    const currentPresCard = document.getElementById('current-pres-card');
+    const currentPresValue = document.getElementById('current-pres-value');
+    const currentPresTime = document.getElementById('current-pres-time');
+
     const recordCountInput = document.getElementById('record-count');
     const fetchButton = document.getElementById('fetch-button');
     const loadingIndicator = document.getElementById('loading');
@@ -30,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`Error en la petición: ${response.statusText}`);
             }
             const data = await response.json();
+            // --- LÓGICA MODIFICADA ---
+            updateCurrentValues(data.currentReading); // Actualizar los gauges actuales
+
             updateStats(data.stats);
             populateTable(data.readings);
         } catch (error) {
@@ -38,6 +54,59 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             loadingIndicator.classList.add('hidden');
         }
+    }
+
+    // --- FUNCIÓN NUEVA: Actualizar los valores actuales ---
+    function updateCurrentValues(reading) {
+        if (!reading) {
+            // Si no hay lectura actual (BD vacía), no hacemos nada o mostramos un mensaje
+            currentTempValue.textContent = '- °C';
+            currentHumValue.textContent = '- %';
+            currentPresValue.textContent = '- hPa';
+            return;
+        }
+
+        // Temperatura
+        const temp = reading.temperature;
+        currentTempValue.textContent = `${temp.toFixed(2)} °C`;
+        // Quitar clases previas y añadir la nueva según el valor
+        currentTempCard.className = 'live-data-card'; // Resetea
+        if (temp < 10) currentTempCard.classList.add('temp-cold');
+        else if (temp >= 10 && temp < 20) currentTempCard.classList.add('temp-mild');
+        else if (temp >= 20 && temp < 30) currentTempCard.classList.add('temp-warm');
+        else currentTempCard.classList.add('temp-hot');
+
+        // Humedad
+        const hum = reading.humidity;
+        currentHumValue.textContent = `${hum.toFixed(2)} %`;
+        currentHumCard.className = 'live-data-card'; // Resetea
+        if (hum < 30) currentHumCard.classList.add('hum-dry');
+        else if (hum >= 30 && hum <= 60) currentHumCard.classList.add('hum-normal');
+        else currentHumCard.classList.add('hum-wet');
+
+        // Presión (para la presión, los colores son más ilustrativos que estándar)
+        const pres = reading.pressure;
+        currentPresValue.textContent = `${pres.toFixed(2)} hPa`;
+        // Para la presión no añadimos colores ya que su rango es menos intuitivo para el color
+        
+        // Actualizar la hora de la lectura
+        const readingTime = new Date(reading.timestamp).toLocaleTimeString();
+        currentTempTime.textContent = `a las ${readingTime}`;
+        currentHumTime.textContent = `a las ${readingTime}`;
+        currentPresTime.textContent = `a las ${readingTime}`;
+    }
+
+    // --- FUNCIÓN NUEVA: Resetear los valores actuales ---
+    function resetCurrentValues() {
+        currentTempValue.textContent = '- °C';
+        currentHumValue.textContent = '- %';
+        currentPresValue.textContent = '- hPa';
+        currentTempTime.textContent = '';
+        currentHumTime.textContent = '';
+        currentPresTime.textContent = '';
+        currentTempCard.className = 'live-data-card';
+        currentHumCard.className = 'live-data-card';
+        currentPresCard.className = 'live-data-card';
     }
 
     function updateStats(stats) {

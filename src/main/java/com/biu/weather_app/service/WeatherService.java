@@ -23,13 +23,18 @@ public class WeatherService {
     }
 
     public WeatherStatsResponse getLatestReadingsAndStats(int n) {
+        
+        // 1. Extraer el valor actual (el último registro)
+        // .orElse(null) devolverá null si la base de datos está vacía.
+        WeatherData currentReading = weatherDataRepository.findFirstByOrderByIdDesc().orElse(null);
+        
         // 3. Extraer los últimos n registros
         List<WeatherData> lastNReadings = weatherDataRepository.findByOrderByIdDesc(PageRequest.of(0, n));
 
         // 4. Calcular valores máximos, mínimos y promedio
         Map<String, Map<String, Double>> stats = calculateStats(lastNReadings);
 
-        return new WeatherStatsResponse(lastNReadings, stats);
+        return new WeatherStatsResponse(currentReading, lastNReadings, stats);
     }
 
     private Map<String, Map<String, Double>> calculateStats(List<WeatherData> readings) {
