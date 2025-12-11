@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         readings.forEach(reading => {
             const row = document.createElement('tr');
             row.innerHTML = `
+                <td>${reading.id}</td>
                 <td>${new Date(reading.timestamp).toLocaleString()}</td>
                 <td>${reading.location}</td>
                 <td>${reading.sensorId}</td>
