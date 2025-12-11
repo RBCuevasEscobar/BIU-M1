@@ -139,10 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        var rowCounter = 1;
+
         readings.forEach(reading => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${reading.id}</td>
+                <td>${rowCounter}</td>
                 <td>${new Date(reading.timestamp).toLocaleString()}</td>
                 <td>${reading.location}</td>
                 <td>${reading.sensorId}</td>
@@ -151,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${reading.pressure.toFixed(2)}</td>
             `;
             tableBody.appendChild(row);
+            rowCounter++;
         });
     }
 
