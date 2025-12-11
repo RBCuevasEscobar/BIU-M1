@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!readings || readings.length === 0) {
             const row = document.createElement('tr');
             const cell = document.createElement('td');
-            cell.colSpan = 6;
+            cell.colSpan = 7;
             cell.textContent = 'No hay datos disponibles.';
             cell.style.textAlign = 'center';
             row.appendChild(cell);
